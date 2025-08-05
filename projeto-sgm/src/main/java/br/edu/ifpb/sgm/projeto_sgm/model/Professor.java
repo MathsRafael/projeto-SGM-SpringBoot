@@ -25,13 +25,11 @@ public class Professor {
     @JoinColumn(name = "id")
     private Pessoa pessoa;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "professor_id")
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
     private List<Disciplina> disciplinas = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(
-            name = "coordenador_curso",
+    @JoinTable(name = "coordenador_curso",
             joinColumns = @JoinColumn(name = "professor_id"),
             inverseJoinColumns = @JoinColumn(name = "curso_id")
     )

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {DisciplinaMapper.class, InstituicaoMapper.class, PessoaMapper.class},
+        uses = {InstituicaoMapper.class, PessoaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface ProfessorMapper {
@@ -16,7 +16,7 @@ public interface ProfessorMapper {
     @Mapping(target = "pessoa", ignore = true)
     Professor toEntity(ProfessorRequestDTO professorRequestDTO);
 
-    @Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
+    //@Mapping(source = "disciplinas", target = "disciplinasResponseDTO")
     @Mapping(source = "cursos", target = "cursosResponseDTO")
     @Mapping(source = "pessoa.id", target = "id")
     @Mapping(source = "pessoa.cpf", target = "cpf")

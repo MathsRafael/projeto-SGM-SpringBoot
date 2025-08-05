@@ -9,5 +9,6 @@ public class DisciplinaResponseDTO {
     private String nome;
     private int cargaHoraria;
     private CursoResponseDTO cursoResponseDTO;
+    private ProfessorResponseDTO professorResponseDTO;
 
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
 @Mapper(componentModel = "spring",
-        uses = {CursoMapper.class},
+        uses = {CursoMapper.class, ProfessorMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface DisciplinaMapper {
@@ -16,8 +16,11 @@ public interface DisciplinaMapper {
     Disciplina toEntity(DisciplinaRequestDTO disciplinaRequestDTO);
 
     @Mapping(source = "curso", target = "cursoResponseDTO")
+    @Mapping(source = "professor", target = "professorResponseDTO")
     DisciplinaResponseDTO toResponseDTO(Disciplina disciplina);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateDisciplinaFromDto(DisciplinaRequestDTO dto, @MappingTarget Disciplina entity);
+
+
 }

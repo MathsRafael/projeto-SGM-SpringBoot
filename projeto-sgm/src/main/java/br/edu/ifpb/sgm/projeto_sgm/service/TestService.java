@@ -133,6 +133,7 @@ public class TestService {
         Disciplina disciplina = new Disciplina();
         disciplina.setNome("Disciplina Teste");
         disciplina.setCargaHoraria(60);
+        disciplina.setProfessor(professor);
         disciplina.setCurso(curso);
         disciplinaRepository.save(disciplina);
 
