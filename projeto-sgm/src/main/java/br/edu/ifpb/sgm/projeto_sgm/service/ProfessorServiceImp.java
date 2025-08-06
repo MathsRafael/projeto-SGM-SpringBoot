@@ -88,33 +88,22 @@ public class ProfessorServiceImp {
     }
 
     public ResponseEntity<ProfessorResponseDTO> atualizar(Long id, ProfessorRequestDTO dto) {
-        Pessoa pessoa = pessoaRepository.findById(id)
-                .orElseThrow(AlunoNotFoundException::new);
-
-        Pessoa pesssoaAtualizada = pessoaMapper.fromPessoa(dto);
-
-        if (dto.getInstituicaoId() != null) {
-            pesssoaAtualizada.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
-        }
-
-        pessoaMapper.updatePessoaFromPessoa(pesssoaAtualizada, pessoa);
 
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + id + " não encontrado."));
 
+        pessoaMapper.updatePessoaFromProfessorRequestDto(dto, professor.getPessoa());
         professorMapper.updateProfessorFromDto(dto, professor);
 
+        if (dto.getInstituicaoId() != null) {
+            professor.getPessoa().setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        }
         if (dto.getDisciplinasId() != null) {
             professor.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
         }
-
         if (dto.getCursosId() != null) {
             professor.setCursos(buscarCursos(dto.getCursosId()));
         }
-
-        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-        professor.setPessoa(pessoaSalva);
-
         Professor atualizado = professorRepository.save(professor);
         return ResponseEntity.ok(professorMapper.toResponseDTO(atualizado));
     }
