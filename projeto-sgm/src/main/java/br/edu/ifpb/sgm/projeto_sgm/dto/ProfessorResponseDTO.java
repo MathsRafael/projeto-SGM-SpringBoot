@@ -2,6 +2,7 @@ package br.edu.ifpb.sgm.projeto_sgm.dto;
 
 import lombok.Data;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class ProfessorResponseDTO{
@@ -14,5 +15,6 @@ public class ProfessorResponseDTO{
     protected String matricula;
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     //private List<DisciplinaResponseDTO> disciplinasResponseDTO;
-    private List<CursoResponseDTO> cursosResponseDTO;
+    private Set<String> cursosCoordenados;
+
 }

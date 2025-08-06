@@ -4,10 +4,7 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
-import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
-import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
-import br.edu.ifpb.sgm.projeto_sgm.exception.ProfessorNotFoundException;
+import br.edu.ifpb.sgm.projeto_sgm.exception.*;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.ProfessorMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
@@ -49,6 +46,9 @@ public class ProfessorServiceImp {
 
     @Autowired
     private PessoaMapper pessoaMapper;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public ResponseEntity<ProfessorResponseDTO> salvar(ProfessorRequestDTO dto) {
         Pessoa pessoa = pessoaMapper.fromPessoa(dto);
@@ -179,5 +179,37 @@ public class ProfessorServiceImp {
                 .map(professorMapper::toResponseDTO)
                 .toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<ProfessorResponseDTO> designarCoordenador(Long professorId, Long cursoId) {
+        Professor professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + professorId + " não encontrado."));
+
+        Curso curso = cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new CursoNotFoundException("Curso com ID " + cursoId + " não encontrado."));
+
+        Role coordenadorRole = roleRepository.findByRole("ROLE_" + COORDENADOR)
+                .orElseThrow(() -> new RuntimeException("Role de Coordenador não encontrada no banco."));
+
+        Pessoa pessoa = professor.getPessoa();
+        if (!pessoa.getRoles().contains(coordenadorRole)) {
+            pessoa.getRoles().add(coordenadorRole);
+        }
+        professor.getCursos().add(curso);
+
+        Professor professorAtualizado = professorRepository.save(professor);
+
+        return ResponseEntity.ok(professorMapper.toResponseDTO(professorAtualizado));
+    }
+
+    public ResponseEntity<Void> removerCargoCoordenador(Long professorId) {
+        Professor professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor com ID " + professorId + " não encontrado."));
+        Pessoa pessoa = professor.getPessoa();
+        pessoa.getRoles().removeIf(role -> role.getRole().equals("ROLE_" + COORDENADOR));
+        professor.getCursos().clear();
+        professorRepository.save(professor);
+
+        return ResponseEntity.noContent().build();
     }
 }

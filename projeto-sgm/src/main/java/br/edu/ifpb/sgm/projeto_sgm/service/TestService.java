@@ -103,6 +103,13 @@ public class TestService {
         admin.setRoles(List.of(adminRole));
         pessoaRepository.save(admin);
 
+        Curso curso = new Curso();
+        curso.setNome("Curso Teste");
+        curso.setDuracao(4);
+        curso.setInstituicao(instituicao);
+        curso.setNivel(NivelCurso.GRADUACAO);
+        cursoRepository.save(curso);
+
         Pessoa pessoaCoordenador = new Pessoa();
         pessoaCoordenador.setNome("Coordenador Teste");
         pessoaCoordenador.setCpf("111.111.111-11");
@@ -115,6 +122,7 @@ public class TestService {
         pessoaRepository.save(pessoaCoordenador);
         Professor professorCoordenador = new Professor();
         professorCoordenador.setPessoa(pessoaCoordenador);
+        professorCoordenador.setCursos(Set.of(curso));
         professorRepository.save(professorCoordenador);
 
         Pessoa pessoaProfessor = new Pessoa();
@@ -131,13 +139,6 @@ public class TestService {
         Professor professorApenasDocente = new Professor();
         professorApenasDocente.setPessoa(pessoaProfessor);
         professorRepository.save(professorApenasDocente);
-
-        Curso curso = new Curso();
-        curso.setNome("Curso Teste");
-        curso.setDuracao(4);
-        curso.setInstituicao(instituicao);
-        curso.setNivel(NivelCurso.GRADUACAO);
-        cursoRepository.save(curso);
 
         Disciplina disciplina = new Disciplina();
         disciplina.setNome("Disciplina Teste");

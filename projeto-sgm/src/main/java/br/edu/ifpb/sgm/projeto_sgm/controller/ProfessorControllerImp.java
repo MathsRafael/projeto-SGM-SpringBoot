@@ -71,4 +71,14 @@ public class ProfessorControllerImp {
         String encodedPassword = passwordEncoder.encode(dto.getSenha());
         dto.setSenha(encodedPassword);
     }
+
+    @PutMapping("/{professorId}/coordenador/{cursoId}")
+    public ResponseEntity<ProfessorResponseDTO> designarCoordenador(@PathVariable Long professorId, @PathVariable Long cursoId) {
+        return professorService.designarCoordenador(professorId, cursoId);
+    }
+
+    @DeleteMapping("/{professorId}/coordenador")
+    public ResponseEntity<Void> removerCargoCoordenador(@PathVariable Long professorId) {
+        return professorService.removerCargoCoordenador(professorId);
+    }
 }
