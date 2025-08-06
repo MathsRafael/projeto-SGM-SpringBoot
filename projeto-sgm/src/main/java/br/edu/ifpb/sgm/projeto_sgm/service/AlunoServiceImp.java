@@ -12,6 +12,7 @@ import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,10 @@ import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DISCENTE;
 @Service
 @Transactional
 public class AlunoServiceImp {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Autowired
     private AlunoRepository alunoRepository;
@@ -49,6 +54,8 @@ public class AlunoServiceImp {
 
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
+        String senhaCriptografada = passwordEncoder.encode(alunoRequestDTO.getSenha());
+        alunoRequestDTO.setSenha(senhaCriptografada);
         Pessoa pessoa = pessoaMapper.fromPessoa(alunoRequestDTO);
         pessoa.setInstituicao(buscarInstituicao(alunoRequestDTO.getInstituicaoId()));
 
@@ -89,31 +96,22 @@ public class AlunoServiceImp {
 
     public ResponseEntity<AlunoResponseDTO> atualizar(Long id, AlunoRequestDTO dto) {
 
-        Pessoa pessoa = pessoaRepository.findById(id)
-                .orElseThrow(AlunoNotFoundException::new);
-
-        Pessoa pesssoaAtualizada = pessoaMapper.fromPessoa(dto);
-
-        if (dto.getInstituicaoId() != null) {
-            pesssoaAtualizada.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
-        }
-
-        pessoaMapper.updatePessoaFromPessoa(pesssoaAtualizada, pessoa);
-
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(AlunoNotFoundException::new);
+
+        pessoaMapper.updatePessoaFromAlunoRequestDto(dto, aluno.getPessoa());
         alunoMapper.updateAlunoFromDto(dto, aluno);
+
+        if (dto.getInstituicaoId() != null) {
+            aluno.getPessoa().setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        }
 
         if (dto.getDisciplinasPagasId() != null) {
             aluno.setDisciplinasPagas(buscarDisciplinas(dto.getDisciplinasPagasId()));
         }
-
         if (dto.getDisciplinasMonitoriaId() != null) {
             aluno.setDisciplinaMonitoria(buscarDisciplinas(dto.getDisciplinasMonitoriaId()));
         }
-
-        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-        aluno.setPessoa(pessoaSalva);
 
         Aluno atualizado = alunoRepository.save(aluno);
         return ResponseEntity.ok(alunoMapper.toResponseDTO(atualizado));

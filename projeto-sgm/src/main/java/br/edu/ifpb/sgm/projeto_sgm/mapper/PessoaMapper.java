@@ -43,4 +43,13 @@ public interface PessoaMapper {
     @Mapping(target = "authorities", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updatePessoaFromDto(PessoaRequestDTO pessoaRequestDTO, @MappingTarget Pessoa entity);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "instituicao", ignore = true)
+    @Mapping(target = "senha", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "aluno", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updatePessoaFromAlunoRequestDto(AlunoRequestDTO dto, @MappingTarget Pessoa entity);
 }

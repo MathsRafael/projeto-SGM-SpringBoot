@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.COORDENADOR;
+
 @Service
 @Transactional
 public class ProfessorServiceImp {
@@ -180,5 +182,13 @@ public class ProfessorServiceImp {
     private Instituicao buscarInstituicao(Long id) {
         return instituicaoRepository.findById(id)
                 .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
+    }
+
+    public ResponseEntity<List<ProfessorResponseDTO>> listarTodosCoordenadores() {
+        List<Professor> coordenadores = professorRepository.findProfessoresByRoleName("ROLE_" + COORDENADOR);
+        List<ProfessorResponseDTO> dtos = coordenadores.stream()
+                .map(professorMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(dtos);
     }
 }

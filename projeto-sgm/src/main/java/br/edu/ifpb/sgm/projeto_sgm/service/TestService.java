@@ -87,6 +87,10 @@ public class TestService {
         instituicao.setEmail("contato@instituicaoteste.com");
         instituicaoRepository.save(instituicao);
 
+        Role adminRole = roleRepository.findByRole("ROLE_" + ADMIN).orElseThrow();
+        Role coordenadorRole = roleRepository.findByRole("ROLE_" + COORDENADOR).orElseThrow();
+        Role docenteRole = roleRepository.findByRole("ROLE_" + DOCENTE).orElseThrow();
+        Role discenteRole = roleRepository.findByRole("ROLE_" + DISCENTE).orElseThrow();
 
         Pessoa admin = new Pessoa();
         admin.setNome("Admin SGM");
@@ -96,19 +100,22 @@ public class TestService {
         admin.setMatricula("admin");
         admin.setSenha(encriptPassword("admin123"));
         admin.setInstituicao(instituicao);
-        admin.setRoles(List.of(roleRepository.findByRole("ROLE_" + ADMIN).orElseThrow(() -> new RuntimeException("Role ADMIN não encontrada!"))));
+        admin.setRoles(List.of(adminRole));
         pessoaRepository.save(admin);
 
-        Pessoa coordenador = new Pessoa();
-        coordenador.setNome("Coordenador Teste");
-        coordenador.setCpf("111.111.111-11");
-        coordenador.setEmail("coordenador@sgm.com");
-        coordenador.setEmailAcademico("coordenador.academico@sgm.com");
-        coordenador.setMatricula("coordenador");
-        coordenador.setSenha(encriptPassword("coord123"));
-        coordenador.setInstituicao(instituicao);
-        coordenador.setRoles(List.of(roleRepository.findByRole("ROLE_" + COORDENADOR).orElseThrow(() -> new RuntimeException("Role COORDENADOR não encontrada!"))));
-        pessoaRepository.save(coordenador);
+        Pessoa pessoaCoordenador = new Pessoa();
+        pessoaCoordenador.setNome("Coordenador Teste");
+        pessoaCoordenador.setCpf("111.111.111-11");
+        pessoaCoordenador.setEmail("coordenador@sgm.com");
+        pessoaCoordenador.setEmailAcademico("coordenador.academico@sgm.com");
+        pessoaCoordenador.setMatricula("coordenador");
+        pessoaCoordenador.setSenha(encriptPassword("coord123"));
+        pessoaCoordenador.setInstituicao(instituicao);
+        pessoaCoordenador.setRoles(List.of(docenteRole, coordenadorRole));
+        pessoaRepository.save(pessoaCoordenador);
+        Professor professorCoordenador = new Professor();
+        professorCoordenador.setPessoa(pessoaCoordenador);
+        professorRepository.save(professorCoordenador);
 
         Pessoa pessoaProfessor = new Pessoa();
         pessoaProfessor.setNome("Professor Teste");
@@ -118,10 +125,12 @@ public class TestService {
         pessoaProfessor.setMatricula("12374");
         pessoaProfessor.setSenha(encriptPassword("senha"));
         pessoaProfessor.setInstituicao(instituicao);
-        pessoaProfessor.setRoles(List.of(roleRepository.findByRole("ROLE_" + DOCENTE).orElseThrow(() -> new RuntimeException("Role DOCENTE não encontrada!"))));
-        Professor professor = new Professor();
-        professor.setPessoa(pessoaProfessor);
-        professorRepository.save(professor);
+        pessoaProfessor.setRoles(List.of(docenteRole));
+        pessoaRepository.save(pessoaProfessor);
+
+        Professor professorApenasDocente = new Professor();
+        professorApenasDocente.setPessoa(pessoaProfessor);
+        professorRepository.save(professorApenasDocente);
 
         Curso curso = new Curso();
         curso.setNome("Curso Teste");
@@ -133,8 +142,8 @@ public class TestService {
         Disciplina disciplina = new Disciplina();
         disciplina.setNome("Disciplina Teste");
         disciplina.setCargaHoraria(60);
-        disciplina.setProfessor(professor);
         disciplina.setCurso(curso);
+        disciplina.setProfessor(professorCoordenador);
         disciplinaRepository.save(disciplina);
 
         AlunoRequestDTO alunoDTO = new AlunoRequestDTO();
@@ -143,7 +152,7 @@ public class TestService {
         alunoDTO.setEmail("joca@gmail.com");
         alunoDTO.setEmailAcademico("joca.academico@gmail.com");
         alunoDTO.setMatricula("123456");
-        alunoDTO.setSenha(encriptPassword("senhaAluno"));
+        alunoDTO.setSenha("senhaAluno");
         alunoDTO.setInstituicaoId(instituicao.getId());
         alunoServiceImp.salvar(alunoDTO);
 
@@ -154,10 +163,9 @@ public class TestService {
         processoSeletivo.setFim(LocalDate.now().plusMonths(2));
         processoSeletivoRepository.save(processoSeletivo);
 
-
         Monitoria monitoria = new Monitoria();
         monitoria.setDisciplina(disciplina);
-        monitoria.setProfessor(professor);
+        monitoria.setProfessor(professorCoordenador);
         monitoria.setNumeroVaga(10);
         monitoria.setNumeroVagaBolsa(2);
         monitoria.setCargaHoraria(60);

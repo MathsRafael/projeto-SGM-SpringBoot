@@ -17,12 +17,9 @@ public class AlunoControllerImp {
     @Autowired
     private AlunoServiceImp alunoService;
 
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
-
     @PostMapping
     public ResponseEntity<AlunoResponseDTO> criar(@RequestBody AlunoRequestDTO dto) {
-        encriptPassword(dto);
+
         return alunoService.salvar(dto);
     }
 
@@ -43,9 +40,7 @@ public class AlunoControllerImp {
 
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> atualizar(@PathVariable Long id, @RequestBody AlunoRequestDTO dto) {
-        if(dto.getSenha() != null){
-            encriptPassword(dto);
-        }
+
         return alunoService.atualizar(id, dto);
     }
 
@@ -59,9 +54,6 @@ public class AlunoControllerImp {
         return alunoService.deletar(id);
     }
 
-    private void encriptPassword(AlunoRequestDTO dto) {
-        String encodedPassword = passwordEncoder.encode(dto.getSenha());
-        dto.setSenha(encodedPassword);
-    }
+
 
 }

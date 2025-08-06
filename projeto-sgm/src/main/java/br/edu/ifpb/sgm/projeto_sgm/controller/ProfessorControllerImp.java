@@ -57,6 +57,11 @@ public class ProfessorControllerImp {
         return professorService.associar(id, dto);
     }
 
+
+    @GetMapping("/coordenadores")
+    public ResponseEntity<List<ProfessorResponseDTO>> listarCoordenadores() {
+        return professorService.listarTodosCoordenadores();
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return professorService.deletar(id);

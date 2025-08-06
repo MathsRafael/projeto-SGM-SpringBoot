@@ -82,6 +82,7 @@ public class WebConfig implements WebMvcConfigurer{
                         .requestMatchers("/api/monitorias/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE)
                         .requestMatchers(HttpMethod.GET, "/api/atividades/**").authenticated()
                         .requestMatchers("/api/atividades/**").hasAnyRole(ADMIN, COORDENADOR, DOCENTE, DISCENTE)
+                        .requestMatchers("/api/professores/coordenadores/**").hasAnyRole(ADMIN, COORDENADOR)
                         .requestMatchers(HttpMethod.GET, "/api/professores/**").authenticated()
                         .requestMatchers("/api/professores/**").hasAnyRole(ADMIN, COORDENADOR)
                         .requestMatchers(HttpMethod.POST, "/api/alunos").permitAll()

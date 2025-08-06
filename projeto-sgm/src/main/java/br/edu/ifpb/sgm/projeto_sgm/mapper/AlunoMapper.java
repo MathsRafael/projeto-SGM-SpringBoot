@@ -27,6 +27,7 @@ public interface AlunoMapper {
     @Mapping(source = "pessoa.instituicao", target = "instituicaoResponseDTO")
     AlunoResponseDTO toResponseDTO(Aluno aluno);
 
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateAlunoFromDto(AlunoRequestDTO dto, @MappingTarget Aluno entity);
 }
