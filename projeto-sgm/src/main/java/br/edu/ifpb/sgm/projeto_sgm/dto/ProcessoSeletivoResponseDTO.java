@@ -8,9 +8,12 @@ import java.util.List;
 public class ProcessoSeletivoResponseDTO {
 
     private Long id;
-    private LocalDate inicio;
-    private LocalDate fim;
-    private String numero;
+    private String titulo;
+    private String descricao;
+    private LocalDate dataInicioInscricoes;
+    private LocalDate dataFimInscricoes;
+    private String status;
     private InstituicaoResponseDTO instituicaoResponseDTO;
+    private List<MonitoriaResponseDTO> monitorias;
 
 }

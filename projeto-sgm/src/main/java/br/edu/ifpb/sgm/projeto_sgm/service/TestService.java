@@ -156,10 +156,13 @@ public class TestService {
         alunoServiceImp.salvar(alunoDTO);
 
         ProcessoSeletivo processoSeletivo = new ProcessoSeletivo();
+
         processoSeletivo.setInstituicao(instituicao);
-        processoSeletivo.setNumero("PS001");
-        processoSeletivo.setInicio(LocalDate.now());
-        processoSeletivo.setFim(LocalDate.now().plusMonths(2));
+        processoSeletivo.setTitulo("Edital de Monitoria 2025.1");
+        processoSeletivo.setDataInicioInscricoes(LocalDate.now());
+        processoSeletivo.setDataFimInscricoes(LocalDate.now().plusMonths(2));
+        processoSeletivo.setDescricao("Descrição edital de monitorias para o período de 2025.1.");
+        processoSeletivo.setStatus(StatusProcessoSeletivo.ABERTO);
         processoSeletivoRepository.save(processoSeletivo);
 
         Monitoria monitoria = new Monitoria();

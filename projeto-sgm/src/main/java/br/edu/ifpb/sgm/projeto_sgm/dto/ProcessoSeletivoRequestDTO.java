@@ -8,9 +8,10 @@ import java.util.List;
 @Data
 public class ProcessoSeletivoRequestDTO {
 
-    private LocalDate inicio;
-    private LocalDate fim;
-    private String numero;
+    private String titulo;
+    private String descricao;
+    private LocalDate dataInicioInscricoes;
+    private LocalDate dataFimInscricoes;
     private Long instituicaoId;
-
+    private List<Long> monitoriasIds;
 }

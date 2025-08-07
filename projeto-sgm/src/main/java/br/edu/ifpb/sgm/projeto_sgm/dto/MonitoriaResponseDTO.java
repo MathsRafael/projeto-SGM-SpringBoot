@@ -12,6 +12,6 @@ public class MonitoriaResponseDTO {
     private int cargaHoraria;
     private ProfessorResponseDTO professorResponseDTO;
     private List<MonitoriaInscritosResponseDTO> monitoriaInscritosResponseDTO;
-    private ProcessoSeletivoResponseDTO processoSeletivoResponseDTO;
+    //private ProcessoSeletivoResponseDTO processoSeletivoResponseDTO;
 
 }

@@ -9,6 +9,7 @@ import br.edu.ifpb.sgm.projeto_sgm.mapper.ProcessoSeletivoMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.Instituicao;
 import br.edu.ifpb.sgm.projeto_sgm.model.Monitoria;
 import br.edu.ifpb.sgm.projeto_sgm.model.ProcessoSeletivo;
+import br.edu.ifpb.sgm.projeto_sgm.model.StatusProcessoSeletivo;
 import br.edu.ifpb.sgm.projeto_sgm.repository.InstituicaoRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.MonitoriaRepository;
 import br.edu.ifpb.sgm.projeto_sgm.repository.ProcessoSeletivoRepository;
@@ -39,10 +40,20 @@ public class ProcessoSeletivoServiceImp {
     private ProcessoSeletivoMapper processoSeletivoMapper;
 
     public ResponseEntity<ProcessoSeletivoResponseDTO> salvar(ProcessoSeletivoRequestDTO dto) {
-        ProcessoSeletivo processo = processoSeletivoMapper.toEntity(dto);
-        processo.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        Instituicao instituicao = instituicaoRepository.findById(dto.getInstituicaoId())
+                .orElseThrow(() -> new InstituicaoNotFoundException("Instituição não encontrada"));
 
-        ProcessoSeletivo salvo = processoSeletivoRepository.save(processo);
+        ProcessoSeletivo processoSeletivo = processoSeletivoMapper.toEntity(dto);
+        processoSeletivo.setInstituicao(instituicao);
+        processoSeletivo.setStatus(StatusProcessoSeletivo.ABERTO);
+
+        if (dto.getMonitoriasIds() != null && !dto.getMonitoriasIds().isEmpty()) {
+            List<Monitoria> monitorias = monitoriaRepository.findAllById(dto.getMonitoriasIds());
+            monitorias.forEach(m -> m.setProcessoSeletivo(processoSeletivo));
+            processoSeletivo.setMonitorias(monitorias);
+        }
+
+        ProcessoSeletivo salvo = processoSeletivoRepository.save(processoSeletivo);
         return ResponseEntity.status(HttpStatus.CREATED).body(processoSeletivoMapper.toResponseDTO(salvo));
     }
 
@@ -61,18 +72,16 @@ public class ProcessoSeletivoServiceImp {
     }
 
     public ResponseEntity<ProcessoSeletivoResponseDTO> atualizar(Long id, ProcessoSeletivoRequestDTO dto) {
-        ProcessoSeletivo processo = processoSeletivoRepository.findById(id)
-                .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo seletivo com ID " + id + " não encontrado."));
+        ProcessoSeletivo processoExistente = processoSeletivoRepository.findById(id)
+                .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo Seletivo não encontrado"));
 
-        processoSeletivoMapper.updateProcessoSeletivoFromDto(dto, processo);
+        processoExistente.setTitulo(dto.getTitulo());
+        processoExistente.setDescricao(dto.getDescricao());
+        processoExistente.setDataInicioInscricoes(dto.getDataInicioInscricoes());
+        processoExistente.setDataFimInscricoes(dto.getDataFimInscricoes());
 
-        if (dto.getInstituicaoId() != null) {
-            processo.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
-        }
-
-
-        ProcessoSeletivo atualizado = processoSeletivoRepository.save(processo);
-        return ResponseEntity.ok(processoSeletivoMapper.toResponseDTO(atualizado));
+        ProcessoSeletivo atualizado = processoSeletivoRepository.save(processoExistente);
+        return ResponseEntity.ok((processoSeletivoMapper.toResponseDTO(atualizado)));
     }
 
     public ResponseEntity<Void> deletar(Long id) {
@@ -80,6 +89,14 @@ public class ProcessoSeletivoServiceImp {
                 .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo seletivo com ID " + id + " não encontrado."));
         processoSeletivoRepository.delete(processo);
         return ResponseEntity.noContent().build();
+    }
+
+    public ProcessoSeletivoResponseDTO fechar(Long id) {
+        ProcessoSeletivo processo = processoSeletivoRepository.findById(id)
+                .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo Seletivo não encontrado"));
+        processo.setStatus(StatusProcessoSeletivo.FECHADO);
+        ProcessoSeletivo atualizado = processoSeletivoRepository.save(processo);
+        return processoSeletivoMapper.toResponseDTO(atualizado);
     }
 
     // Métodos auxiliares

@@ -60,7 +60,7 @@ public class MonitoriaServiceImp {
         novaMonitoria.setProcessoSeletivo(processoSeletivo);
 
         Monitoria monitoriaSalva = monitoriaRepository.save(novaMonitoria);
-        return ResponseEntity.ok(monitoriaMapper.toResponseDTO(monitoriaSalva));
+        return ResponseEntity.status(HttpStatus.CREATED).body(monitoriaMapper.toResponseDTO(monitoriaSalva));
     }
 
     public ResponseEntity<MonitoriaResponseDTO> buscarPorId(Long id) {
@@ -99,7 +99,7 @@ public class MonitoriaServiceImp {
         monitoria.setCargaHoraria(dto.getCargaHoraria());
 
         Monitoria atualizada = monitoriaRepository.save(monitoria);
-        return ResponseEntity.ok(monitoriaMapper.toResponseDTO(atualizada));
+        return ResponseEntity.ok((monitoriaMapper.toResponseDTO(atualizada)));
     }
 
     public ResponseEntity<Void> deletar(Long id) {

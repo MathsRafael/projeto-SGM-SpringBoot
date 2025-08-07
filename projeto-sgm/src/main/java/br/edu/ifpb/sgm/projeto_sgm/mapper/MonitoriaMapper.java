@@ -17,7 +17,7 @@ public abstract class MonitoriaMapper {
     public abstract Monitoria toEntity(MonitoriaRequestDTO monitoriaRequestDTO);
 
     @Mapping(source = "professor", target = "professorResponseDTO")
-    @Mapping(source = "processoSeletivo", target = "processoSeletivoResponseDTO")
+    //@Mapping(source = "processoSeletivo", target = "processoSeletivoResponseDTO")
     @Mapping(source = "disciplina", target = "disciplinaResponseDTO")
     @Mapping(source = "inscricoes", target = "monitoriaInscritosResponseDTO")
     public abstract MonitoriaResponseDTO toResponseDTO( Monitoria monitoria);

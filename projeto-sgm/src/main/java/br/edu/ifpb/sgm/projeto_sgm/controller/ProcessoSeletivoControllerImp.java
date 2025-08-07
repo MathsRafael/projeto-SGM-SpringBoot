@@ -41,4 +41,9 @@ public class ProcessoSeletivoControllerImp {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return processoSeletivoService.deletar(id);
     }
+
+    @PutMapping("/{id}/fechar")
+    public ResponseEntity<ProcessoSeletivoResponseDTO> fecharEdital(@PathVariable Long id) {
+        return ResponseEntity.ok(processoSeletivoService.fechar(id));
+    }
 }

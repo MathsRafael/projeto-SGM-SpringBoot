@@ -22,16 +22,27 @@ public class ProcessoSeletivo {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate inicio;
+    private LocalDate dataInicioInscricoes;
 
     @Column(nullable = false)
-    private LocalDate fim;
+    private LocalDate dataFimInscricoes;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusProcessoSeletivo status;
 
     @Column(nullable = false, unique = true)
-    private String numero;
+    private String titulo;
+
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "instiuicao_id", nullable = false)
     private Instituicao instituicao;
+
+    @OneToMany(mappedBy = "processoSeletivo", cascade = CascadeType.ALL)
+    private List<Monitoria> monitorias = new ArrayList<>();
 
 }
