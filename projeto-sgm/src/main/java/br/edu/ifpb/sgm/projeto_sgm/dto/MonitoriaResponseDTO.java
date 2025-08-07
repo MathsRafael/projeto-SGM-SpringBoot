@@ -9,7 +9,6 @@ public class MonitoriaResponseDTO {
     private Long id;
     private DisciplinaResponseDTO disciplinaResponseDTO;
     private int numeroVaga;
-    private int numeroVagaBolsa;
     private int cargaHoraria;
     private ProfessorResponseDTO professorResponseDTO;
     private List<MonitoriaInscritosResponseDTO> monitoriaInscritosResponseDTO;

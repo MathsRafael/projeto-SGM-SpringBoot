@@ -38,22 +38,29 @@ public class MonitoriaServiceImp {
     @Autowired
     private MonitoriaInscricoesRepository monitoriaInscricoesRepository;
 
-    @Autowired
-    private AtividadeRepository atividadeRepository;
 
     @Autowired
     private MonitoriaMapper monitoriaMapper;
 
     public ResponseEntity<MonitoriaResponseDTO> salvar(MonitoriaRequestDTO dto) {
-        Monitoria monitoria = monitoriaMapper.toEntity(dto);
+        Disciplina disciplina = disciplinaRepository.findById(dto.getDisciplinaId())
+                .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina não encontrada"));
 
-        monitoria.setDisciplina(buscarDisciplina(dto.getDisciplinaId()));
-        monitoria.setProfessor(buscarProfessor(dto.getProfessorId()));
-        monitoria.setProcessoSeletivo(buscarProcesso(dto.getProcessoSeletivoId()));
-        monitoria.setInscricoes(buscarInscritosMonitoria(dto.getInscricoesId()));
+        Professor professor = disciplina.getProfessor();
+        if (professor == null) {
+            throw new RuntimeException("A disciplina selecionada não possui um professor responsável.");
+        }
 
-        Monitoria salva = monitoriaRepository.save(monitoria);
-        return ResponseEntity.status(HttpStatus.CREATED).body(monitoriaMapper.toResponseDTO(salva));
+        ProcessoSeletivo processoSeletivo = processoSeletivoRepository.findById(dto.getProcessoSeletivoId())
+                .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo Seletivo não encontrado"));
+
+        Monitoria novaMonitoria = monitoriaMapper.toEntity(dto);
+        novaMonitoria.setDisciplina(disciplina);
+        novaMonitoria.setProfessor(professor);
+        novaMonitoria.setProcessoSeletivo(processoSeletivo);
+
+        Monitoria monitoriaSalva = monitoriaRepository.save(novaMonitoria);
+        return ResponseEntity.ok(monitoriaMapper.toResponseDTO(monitoriaSalva));
     }
 
     public ResponseEntity<MonitoriaResponseDTO> buscarPorId(Long id) {
@@ -72,28 +79,24 @@ public class MonitoriaServiceImp {
 
     public ResponseEntity<MonitoriaResponseDTO> atualizar(Long id, MonitoriaRequestDTO dto) {
         Monitoria monitoria = monitoriaRepository.findById(id)
-                .orElseThrow(() -> new MonitoriaNotFoundException("Monitoria com ID " + id + " não encontrada."));
+                .orElseThrow(() -> new MonitoriaNotFoundException("Monitoria não encontrada"));
 
-        monitoriaMapper.updateMonitoriaFromDto(dto, monitoria);
+        Disciplina disciplina = disciplinaRepository.findById(dto.getDisciplinaId())
+                .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina não encontrada"));
 
-        if (dto.getDisciplinaId() != null) {
-            monitoria.setDisciplina(buscarDisciplina(dto.getDisciplinaId()));
+        Professor professor = disciplina.getProfessor();
+        if (professor == null) {
+            throw new RuntimeException("A disciplina selecionada não possui um professor responsável.");
         }
 
-        if (dto.getProfessorId() != null) {
-            monitoria.setProfessor(buscarProfessor(dto.getProfessorId()));
-        }
+        ProcessoSeletivo processoSeletivo = processoSeletivoRepository.findById(dto.getProcessoSeletivoId())
+                .orElseThrow(() -> new ProcessoSeletivoNotFoundException("Processo Seletivo não encontrado"));
 
-        if (dto.getInscricoesId() != null) {
-            monitoria.setInscricoes(buscarInscritosMonitoria(dto.getInscricoesId()));
-        }
-
-
-        if (dto.getProcessoSeletivoId() != null) {
-            monitoria.setProcessoSeletivo(buscarProcesso(dto.getProcessoSeletivoId()));
-        }
-
-
+        monitoria.setDisciplina(disciplina);
+        monitoria.setProfessor(professor);
+        monitoria.setProcessoSeletivo(processoSeletivo);
+        monitoria.setNumeroVaga(dto.getNumeroVaga());
+        monitoria.setCargaHoraria(dto.getCargaHoraria());
 
         Monitoria atualizada = monitoriaRepository.save(monitoria);
         return ResponseEntity.ok(monitoriaMapper.toResponseDTO(atualizada));

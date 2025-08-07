@@ -38,7 +38,12 @@ public class DisciplinaServiceImp {
 
     public ResponseEntity<DisciplinaResponseDTO> salvar(DisciplinaRequestDTO dto) {
         Disciplina disciplina = disciplinaMapper.toEntity(dto);
-        disciplina.setCurso(buscarCurso(dto.getCursoId()));
+        Curso curso = cursoRepository.findById(dto.getCursoId())
+                .orElseThrow(() -> new RuntimeException("Curso não encontrado"));
+        disciplina.setCurso(curso);
+        Professor professor = professorRepository.findById(dto.getProfessorId())
+                .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+        disciplina.setProfessor(professor);
         Disciplina salva = disciplinaRepository.save(disciplina);
         return ResponseEntity.status(HttpStatus.CREATED).body(disciplinaMapper.toResponseDTO(salva));
     }

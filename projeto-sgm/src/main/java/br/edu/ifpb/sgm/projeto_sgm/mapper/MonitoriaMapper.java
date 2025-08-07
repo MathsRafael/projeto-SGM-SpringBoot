@@ -14,10 +14,6 @@ import org.springframework.context.annotation.Lazy;
 )
 public abstract class MonitoriaMapper {
 
-    @Autowired
-    @Lazy
-    protected MonitoriaInscritosMapper monitoriaInscritosMapper;
-
     public abstract Monitoria toEntity(MonitoriaRequestDTO monitoriaRequestDTO);
 
     @Mapping(source = "professor", target = "professorResponseDTO")

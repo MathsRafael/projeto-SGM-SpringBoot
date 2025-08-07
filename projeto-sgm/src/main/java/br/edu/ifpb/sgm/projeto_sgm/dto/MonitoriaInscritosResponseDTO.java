@@ -9,7 +9,6 @@ import lombok.Data;
 public class MonitoriaInscritosResponseDTO {
 
     private MonitoriaInscritoId id;
-    private MonitoriaResponseDTO monitoriaResponseDTO;
     private AlunoResponseDTO alunoResponseDTO;
     private boolean selecionado;
 }

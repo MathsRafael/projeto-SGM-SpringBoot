@@ -8,5 +8,6 @@ public class DisciplinaRequestDTO {
     private String nome;
     private int cargaHoraria;
     private Long cursoId;
+    private Long professorId;
 
 }

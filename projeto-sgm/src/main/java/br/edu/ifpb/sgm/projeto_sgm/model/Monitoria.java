@@ -22,13 +22,10 @@ public class Monitoria {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "disciplina_id")
-    private Disciplina disciplina; // Considere transformar em entidade se quiser relação forte
+    private Disciplina disciplina;
 
     @Column(nullable = false)
     private int numeroVaga;
-
-    @Column(nullable = false)
-    private int numeroVagaBolsa;
 
     @Column(nullable = false)
     private int cargaHoraria;

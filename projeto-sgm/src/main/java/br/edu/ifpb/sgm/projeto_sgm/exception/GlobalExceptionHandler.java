@@ -58,11 +58,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @ExceptionHandler(AtividadeNotFoundException.class)
-    public ResponseEntity<String> handleAtividadeNotFound(AtividadeNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
     @ExceptionHandler(MonitorNotFoundException.class)
     public ResponseEntity<String> handleMonitorNotFound(MonitorNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

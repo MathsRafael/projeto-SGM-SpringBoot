@@ -50,8 +50,6 @@ public class TestService {
     @Autowired
     private MonitoriaRepository monitoriaRepository;
 
-    @Autowired
-    private AtividadeRepository atividadeRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -118,7 +116,7 @@ public class TestService {
         pessoaCoordenador.setMatricula("coordenador");
         pessoaCoordenador.setSenha(encriptPassword("coord123"));
         pessoaCoordenador.setInstituicao(instituicao);
-        pessoaCoordenador.setRoles(List.of(docenteRole, coordenadorRole));
+        pessoaCoordenador.setRoles(List.of(coordenadorRole, docenteRole));
         pessoaRepository.save(pessoaCoordenador);
         Professor professorCoordenador = new Professor();
         professorCoordenador.setPessoa(pessoaCoordenador);
@@ -166,17 +164,11 @@ public class TestService {
 
         Monitoria monitoria = new Monitoria();
         monitoria.setDisciplina(disciplina);
-        monitoria.setProfessor(professorCoordenador);
+        monitoria.setProfessor(disciplina.getProfessor());
         monitoria.setNumeroVaga(10);
-        monitoria.setNumeroVagaBolsa(2);
         monitoria.setCargaHoraria(60);
         monitoria.setProcessoSeletivo(processoSeletivo);
         monitoriaRepository.save(monitoria);
 
-        Atividade atividade = new Atividade();
-        atividade.setDataHora(LocalDateTime.now());
-        atividade.setDescricao("atividade teste");
-        atividade.setMonitoria(monitoria);
-        atividadeRepository.save(atividade);
     }
 }
