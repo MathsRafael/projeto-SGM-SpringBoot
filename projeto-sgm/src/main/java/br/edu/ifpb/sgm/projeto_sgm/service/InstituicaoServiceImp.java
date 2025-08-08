@@ -75,7 +75,6 @@ public class InstituicaoServiceImp {
         return ResponseEntity.noContent().build();
     }
 
-    // Métodos auxiliares para buscar listas relacionadas
     private List<Curso> buscarCursos(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
 

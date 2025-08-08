@@ -15,6 +15,6 @@ public class ProfessorResponseDTO{
     protected String matricula;
     //protected InstituicaoResponseDTO instituicaoResponseDTO;
     //private List<DisciplinaResponseDTO> disciplinasResponseDTO;
-    //private Set<String> cursosCoordenados;
+    private Set<String> cursosCoordenados;
 
 }

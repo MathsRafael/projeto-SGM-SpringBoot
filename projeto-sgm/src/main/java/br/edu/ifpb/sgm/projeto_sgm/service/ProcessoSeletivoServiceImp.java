@@ -99,7 +99,6 @@ public class ProcessoSeletivoServiceImp {
         return processoSeletivoMapper.toResponseDTO(atualizado);
     }
 
-    // Métodos auxiliares
 
     private Instituicao buscarInstituicao(Long id) {
         return instituicaoRepository.findById(id)

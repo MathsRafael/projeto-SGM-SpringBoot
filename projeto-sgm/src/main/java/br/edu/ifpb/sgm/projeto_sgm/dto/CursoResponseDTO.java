@@ -11,7 +11,7 @@ public class CursoResponseDTO {
     private Long id;
     private String nome;
     private NivelCurso nivel;
-    private int duracao; // em semestres, por exemplo
+    private int duracao;
     private InstituicaoResponseDTO instituicaoResponseDTO;
 
 }

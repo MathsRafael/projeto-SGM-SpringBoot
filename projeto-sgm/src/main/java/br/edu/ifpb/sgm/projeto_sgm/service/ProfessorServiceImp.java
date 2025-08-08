@@ -150,7 +150,6 @@ public class ProfessorServiceImp {
         return ResponseEntity.status(HttpStatus.CREATED).body(professorMapper.toResponseDTO(salvo));
     }
 
-    // Auxiliar
     private List<Disciplina> buscarDisciplinas(List<Long> ids) {
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
 

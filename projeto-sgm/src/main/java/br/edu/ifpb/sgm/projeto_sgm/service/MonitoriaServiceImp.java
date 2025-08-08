@@ -109,8 +109,6 @@ public class MonitoriaServiceImp {
         return ResponseEntity.noContent().build();
     }
 
-    // Métodos auxiliares
-
     private Disciplina buscarDisciplina(Long id) {
         return disciplinaRepository.findById(id)
                 .orElseThrow(() -> new DisciplinaNotFoundException("Disciplina com ID " + id + " não encontrada."));

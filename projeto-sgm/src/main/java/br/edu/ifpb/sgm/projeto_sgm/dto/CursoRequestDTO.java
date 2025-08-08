@@ -8,7 +8,7 @@ public class CursoRequestDTO {
 
     private String nome;
     private String nivelString;
-    private int duracao; // em semestres, por exemplo
+    private int duracao;
     private Long instituicaoId;
 
 }

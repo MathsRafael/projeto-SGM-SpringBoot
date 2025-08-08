@@ -83,7 +83,6 @@ public class DisciplinaServiceImp {
         return ResponseEntity.noContent().build();
     }
 
-    // Métodos auxiliares
     private Curso buscarCurso(Long id) {
         return cursoRepository.findById(id)
                 .orElseThrow(() -> new CursoNotFoundException("Curso com ID " + id + " não encontrado."));

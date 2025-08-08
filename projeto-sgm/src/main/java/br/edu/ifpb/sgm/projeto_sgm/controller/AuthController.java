@@ -57,7 +57,6 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
-    // Remove a autenticação do usuário atual
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Logout realizado com sucesso!");
     }

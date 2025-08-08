@@ -25,7 +25,7 @@ public class Curso {
     private NivelCurso nivel;
 
     @Column(nullable = false)
-    private int duracao; // em semestres, por exemplo
+    private int duracao;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "instituicao_id", nullable = false)

@@ -26,6 +26,7 @@ public interface ProfessorMapper {
     @Mapping(source = "pessoa.email", target = "email")
     @Mapping(source = "pessoa.matricula", target = "matricula")
     @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
+    @Mapping(source = "cursos", target = "cursosCoordenados")
     ProfessorResponseDTO toResponseDTO(Professor professor);
 
     default Set<String> mapCursosToNomes(Set<Curso> cursos) {
