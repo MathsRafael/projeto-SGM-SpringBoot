@@ -10,6 +10,7 @@ public class MonitoriaResponseDTO {
     private DisciplinaResponseDTO disciplinaResponseDTO;
     private int numeroVaga;
     private int cargaHoraria;
+    private String statusProcessoSeletivo;
     private ProfessorResponseDTO professorResponseDTO;
     private List<MonitoriaInscritosResponseDTO> monitoriaInscritosResponseDTO;
     //private ProcessoSeletivoResponseDTO processoSeletivoResponseDTO;

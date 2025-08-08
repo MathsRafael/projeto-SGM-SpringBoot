@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Lazy;
 
 @Mapper(
         componentModel = "spring",
-        uses = {DisciplinaMapper.class, ProfessorMapper.class, ProcessoSeletivoMapper.class},
+        uses = {DisciplinaMapper.class, ProfessorMapper.class, ProcessoSeletivoMapper.class, MonitoriaInscritosMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public abstract class MonitoriaMapper {

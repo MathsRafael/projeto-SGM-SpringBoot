@@ -142,4 +142,30 @@ public class MonitoriaServiceImp {
                 .map(id -> monitoriaInscricoesRepository.findById(id).get())
                 .collect(Collectors.toList());
     }
+    public void inscreverAluno(Long monitoriaId, String alunoMatricula) {
+        Monitoria monitoria = monitoriaRepository.findById(monitoriaId)
+                .orElseThrow(() -> new RuntimeException("Vaga de monitoria não encontrada."));
+
+        Aluno aluno = alunoRepository.findByPessoaMatricula(alunoMatricula)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado."));
+
+        if (monitoria.getProcessoSeletivo().getStatus() != StatusProcessoSeletivo.ABERTO) {
+            throw new RuntimeException("As inscrições para este edital estão encerradas.");
+        }
+
+        boolean jaInscrito = monitoria.getInscricoes().stream()
+                .anyMatch(inscricao -> inscricao.getAluno().getId().equals(aluno.getId()));
+
+        if (jaInscrito) {
+            throw new RuntimeException("Você já está inscrito nesta vaga de monitoria.");
+        }
+
+        MonitoriaInscritos novaInscricao = new MonitoriaInscritos();
+        novaInscricao.setMonitoria(monitoria);
+        novaInscricao.setAluno(aluno);
+        novaInscricao.setSelecionado(false);
+
+        monitoria.getInscricoes().add(novaInscricao);
+        monitoriaRepository.save(monitoria);
+    }
 }

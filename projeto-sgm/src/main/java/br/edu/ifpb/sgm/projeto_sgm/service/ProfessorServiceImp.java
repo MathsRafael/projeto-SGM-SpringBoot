@@ -1,10 +1,8 @@
 package br.edu.ifpb.sgm.projeto_sgm.service;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.exception.*;
+import br.edu.ifpb.sgm.projeto_sgm.mapper.MonitoriaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.ProfessorMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
@@ -12,6 +10,7 @@ import br.edu.ifpb.sgm.projeto_sgm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.COORDENADOR;
+import static br.edu.ifpb.sgm.projeto_sgm.util.Constants.DOCENTE;
 
 @Service
 @Transactional
@@ -48,16 +48,32 @@ public class ProfessorServiceImp {
     private PessoaMapper pessoaMapper;
 
     @Autowired
+    private MonitoriaMapper monitoriaMapper;
+
+    @Autowired
+    private MonitoriaRepository monitoriaRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     public ResponseEntity<ProfessorResponseDTO> salvar(ProfessorRequestDTO dto) {
+        String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
+
         Pessoa pessoa = pessoaMapper.fromPessoa(dto);
-        pessoa.setInstituicao(buscarInstituicao(dto.getInstituicaoId()));
+        pessoa.setSenha(senhaCriptografada);
+
+        Role docenteRole = roleRepository.findByRole("ROLE_" + DOCENTE)
+                .orElseThrow(() -> new RuntimeException("ERRO CRÍTICO: Role DOCENTE não encontrada no banco!"));
+
+        pessoa.setRoles(List.of(docenteRole));
+
         Pessoa pessoaSalva = pessoaRepository.save(pessoa);
 
         Professor professor = new Professor();
-        professor.setDisciplinas(buscarDisciplinas(dto.getDisciplinasId()));
-        professor.setCursos(buscarCursos(dto.getCursosId()));
         professor.setPessoa(pessoaSalva);
 
         Professor salvo = professorRepository.save(professor);
@@ -211,5 +227,12 @@ public class ProfessorServiceImp {
         professorRepository.save(professor);
 
         return ResponseEntity.noContent().build();
+    }
+
+    public List<MonitoriaResponseDTO> findMonitoriasByProfessor(String matricula) {
+        List<Monitoria> monitorias = monitoriaRepository.findByProfessor_Pessoa_Matricula(matricula);
+        return monitorias.stream()
+                .map(monitoriaMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 }

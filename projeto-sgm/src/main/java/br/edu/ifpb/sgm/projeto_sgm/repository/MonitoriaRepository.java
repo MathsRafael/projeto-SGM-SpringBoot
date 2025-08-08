@@ -1,5 +1,6 @@
 package br.edu.ifpb.sgm.projeto_sgm.repository;
 
+import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.model.Monitoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface MonitoriaRepository extends JpaRepository<Monitoria, Long> {
+    List<Monitoria> findByProfessor_Pessoa_Matricula(String matricula);
 //    List<Monitoria> findByProfessor_Id(Long professorId);
 //    List<Monitoria> findByProcessoSeletivo_Id(Long processoId);
 //    List<Monitoria> findBySelecionados_Id(Long alunoId);

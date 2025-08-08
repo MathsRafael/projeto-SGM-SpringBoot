@@ -1,13 +1,11 @@
 package br.edu.ifpb.sgm.projeto_sgm.controller;
 
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorRequestDTO;
-import br.edu.ifpb.sgm.projeto_sgm.dto.ProfessorResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.*;
 import br.edu.ifpb.sgm.projeto_sgm.model.Professor;
 import br.edu.ifpb.sgm.projeto_sgm.service.ProfessorServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,5 +78,12 @@ public class ProfessorControllerImp {
     @DeleteMapping("/{professorId}/coordenador")
     public ResponseEntity<Void> removerCargoCoordenador(@PathVariable Long professorId) {
         return professorService.removerCargoCoordenador(professorId);
+    }
+
+    @GetMapping("/minhas-monitorias")
+    public ResponseEntity<List<MonitoriaResponseDTO>> getMinhasMonitorias(Authentication authentication) {
+        String professorMatricula = authentication.getName();
+        List<MonitoriaResponseDTO> monitorias = professorService.findMonitoriasByProfessor(professorMatricula);
+        return ResponseEntity.ok(monitorias);
     }
 }

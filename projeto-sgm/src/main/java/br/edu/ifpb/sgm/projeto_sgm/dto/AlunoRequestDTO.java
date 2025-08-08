@@ -7,6 +7,7 @@ import java.util.Set;
 public class AlunoRequestDTO{
 
     protected String cpf;
+    protected Double cre;
     protected String nome;
     protected String email;
     protected String emailAcademico;

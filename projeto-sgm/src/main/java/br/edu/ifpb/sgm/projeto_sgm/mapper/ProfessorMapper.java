@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
-        uses = {InstituicaoMapper.class, PessoaMapper.class, CursoMapper.class},
+        uses = {PessoaMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface ProfessorMapper {
@@ -26,8 +26,6 @@ public interface ProfessorMapper {
     @Mapping(source = "pessoa.email", target = "email")
     @Mapping(source = "pessoa.matricula", target = "matricula")
     @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
-    @Mapping(source = "pessoa.instituicao", target = "instituicaoResponseDTO")
-    @Mapping(source = "cursos", target = "cursosCoordenados")
     ProfessorResponseDTO toResponseDTO(Professor professor);
 
     default Set<String> mapCursosToNomes(Set<Curso> cursos) {

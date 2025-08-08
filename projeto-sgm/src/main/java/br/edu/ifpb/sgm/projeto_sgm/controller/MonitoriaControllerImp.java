@@ -4,7 +4,9 @@ import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.MonitoriaResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.service.MonitoriaServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,5 +42,12 @@ public class MonitoriaControllerImp {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         return monitoriaService.deletar(id);
+    }
+
+    @PostMapping("/{monitoriaId}/inscrever-se")
+    public ResponseEntity<Void> inscreverAluno(@PathVariable Long monitoriaId, Authentication authentication) {
+        String alunoMatricula = authentication.getName();
+        monitoriaService.inscreverAluno(monitoriaId, alunoMatricula);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

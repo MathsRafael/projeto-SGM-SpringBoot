@@ -34,7 +34,7 @@ public class Pessoa implements UserDetails {
     @Column(nullable = false, unique = true)
     protected String emailAcademico;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     protected Instituicao instituicao;
 
     @Column(length = 12, nullable = false, unique = true)

@@ -23,6 +23,7 @@ public interface AlunoMapper {
     @Mapping(source = "pessoa.nome", target = "nome")
     @Mapping(source = "pessoa.email", target = "email")
     @Mapping(source = "pessoa.matricula", target = "matricula")
+    @Mapping(source = "cre", target = "cre")
     @Mapping(source = "pessoa.emailAcademico", target = "emailAcademico")
     @Mapping(source = "pessoa.instituicao", target = "instituicaoResponseDTO")
     AlunoResponseDTO toResponseDTO(Aluno aluno);

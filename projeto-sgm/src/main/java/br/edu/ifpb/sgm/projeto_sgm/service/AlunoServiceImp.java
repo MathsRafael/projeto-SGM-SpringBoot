@@ -2,10 +2,12 @@ package br.edu.ifpb.sgm.projeto_sgm.service;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.MinhaInscricaoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.exception.DisciplinaNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.AlunoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.exception.InstituicaoNotFoundException;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.AlunoMapper;
+import br.edu.ifpb.sgm.projeto_sgm.mapper.MonitoriaInscritosMapper;
 import br.edu.ifpb.sgm.projeto_sgm.mapper.PessoaMapper;
 import br.edu.ifpb.sgm.projeto_sgm.model.*;
 import br.edu.ifpb.sgm.projeto_sgm.repository.*;
@@ -52,6 +54,12 @@ public class AlunoServiceImp {
     @Autowired
     private PessoaMapper pessoaMapper;
 
+    @Autowired
+    private MonitoriaInscricoesRepository monitoriaInscricoesRepository;
+
+    @Autowired
+    private MonitoriaInscritosMapper monitoriaInscritosMapper;
+
 
     public ResponseEntity<AlunoResponseDTO> salvar(AlunoRequestDTO alunoRequestDTO){
         String senhaCriptografada = passwordEncoder.encode(alunoRequestDTO.getSenha());
@@ -66,6 +74,7 @@ public class AlunoServiceImp {
         Aluno aluno = new Aluno();
         aluno.setDisciplinasPagas(buscarDisciplinas(alunoRequestDTO.getDisciplinasPagasId()));
         aluno.setDisciplinaMonitoria(buscarDisciplinas(alunoRequestDTO.getDisciplinasMonitoriaId()));
+        aluno.setCre(alunoRequestDTO.getCre());
         aluno.setPessoa(pessoaSalva);
 
         Aluno salvo = alunoRepository.save(aluno);
@@ -163,5 +172,14 @@ public class AlunoServiceImp {
     private Instituicao buscarInstituicao(Long id) {
         return instituicaoRepository.findById(id)
                 .orElseThrow(() -> new InstituicaoNotFoundException("Instituição com ID " + id + " não encontrada."));
+    }
+
+    public List<MinhaInscricaoResponseDTO> findInscricoesByAlunoMatricula(String matricula) {
+        List<MonitoriaInscritos> inscricoes = monitoriaInscricoesRepository.findByAluno_Pessoa_Matricula(matricula);
+
+        return inscricoes.stream()
+                .map(monitoriaInscritosMapper::toMinhaInscricaoDTO)
+                .collect(Collectors.toList());
+
     }
 }

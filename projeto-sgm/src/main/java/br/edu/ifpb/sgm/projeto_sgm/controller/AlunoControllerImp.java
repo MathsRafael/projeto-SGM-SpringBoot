@@ -2,9 +2,11 @@ package br.edu.ifpb.sgm.projeto_sgm.controller;
 
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoRequestDTO;
 import br.edu.ifpb.sgm.projeto_sgm.dto.AlunoResponseDTO;
+import br.edu.ifpb.sgm.projeto_sgm.dto.MinhaInscricaoResponseDTO;
 import br.edu.ifpb.sgm.projeto_sgm.service.AlunoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +56,11 @@ public class AlunoControllerImp {
         return alunoService.deletar(id);
     }
 
-
+    @GetMapping("/minhas-inscricoes")
+    public ResponseEntity<List<MinhaInscricaoResponseDTO>> getMinhasInscricoes(Authentication authentication) {
+        String matricula = authentication.getName();
+        List<MinhaInscricaoResponseDTO> inscricoes = alunoService.findInscricoesByAlunoMatricula(matricula);
+        return ResponseEntity.ok(inscricoes);
+    }
 
 }

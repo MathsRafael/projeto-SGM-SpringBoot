@@ -12,7 +12,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     List<Aluno> findByCadastradoTrue();
 
-//    Optional<Aluno> findByMatricula(String matricula);
+    Optional<Aluno> findByPessoaMatricula(String matricula);
 //    List<Aluno> findByNomeContainingIgnoreCase(String nome);
 //    List<Aluno> findByDisciplinasPagas_Id(Long disciplinaId);
 

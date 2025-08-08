@@ -147,6 +147,7 @@ public class TestService {
 
         AlunoRequestDTO alunoDTO = new AlunoRequestDTO();
         alunoDTO.setNome("Joca Teste");
+        alunoDTO.setCre(84.5);
         alunoDTO.setCpf("222.222.222-22");
         alunoDTO.setEmail("joca@gmail.com");
         alunoDTO.setEmailAcademico("joca.academico@gmail.com");

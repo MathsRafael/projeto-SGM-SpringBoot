@@ -11,6 +11,7 @@ public class AlunoResponseDTO{
     protected String nome;
     protected String email;
     protected String emailAcademico;
+    private Double cre;
     protected InstituicaoResponseDTO instituicaoResponseDTO;
     protected String matricula;
     private Set<DisciplinaResponseDTO> disciplinasPagasResponseDTO;

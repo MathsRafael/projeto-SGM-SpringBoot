@@ -43,4 +43,8 @@ public class Aluno {
 
     @Column
     private Boolean cadastrado = true;
+
+
+    @Column(name = "cre")
+    private Double cre;
 }
