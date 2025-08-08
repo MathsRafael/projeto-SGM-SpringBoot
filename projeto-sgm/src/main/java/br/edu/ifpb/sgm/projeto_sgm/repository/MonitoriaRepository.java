@@ -11,21 +11,5 @@ import java.util.List;
 
 public interface MonitoriaRepository extends JpaRepository<Monitoria, Long> {
     List<Monitoria> findByProfessor_Pessoa_Matricula(String matricula);
-//    List<Monitoria> findByProfessor_Id(Long professorId);
-//    List<Monitoria> findByProcessoSeletivo_Id(Long processoId);
-//    List<Monitoria> findBySelecionados_Id(Long alunoId);
-//    List<Monitoria> findByInscritos_Id(Long alunoId);
-//
-//    // Retorna Monitorias ativas por instituição e data
-//    @Query("SELECT m FROM Monitoria m WHERE m.processoSeletivo.inicio <= :data AND m.processoSeletivo.fim >= :data AND m.processoSeletivo.instituicao.id = :instituicaoId")
-//    List<Monitoria> findMonitoriasAtivasPorInstituicao(@Param("data") LocalDate data, @Param("instituicaoId") Long instituicaoId);
-//
-//    // Relatório de vagas ocupadas
-//    @Query("SELECT m.id, m.disciplina, SIZE(m.selecionados) FROM Monitoria m")
-//    List<Object[]> countAlunosSelecionadosPorMonitoria();
-//
-//    //Buscar monitorias por disciplina e status
-//    @Query("SELECT m FROM Monitoria m WHERE m.disciplina = :disciplina AND m.processoSeletivo.inicio <= :hoje AND m.processoSeletivo.fim >= :hoje")
-//    List<Monitoria> findMonitoriasAtivasPorDisciplina(@Param("disciplina") String disciplina, @Param("hoje") LocalDate hoje);
 
 }

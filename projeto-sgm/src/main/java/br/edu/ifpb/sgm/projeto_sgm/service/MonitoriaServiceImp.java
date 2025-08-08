@@ -152,7 +152,7 @@ public class MonitoriaServiceImp {
         }
 
         boolean jaInscrito = monitoria.getInscricoes().stream()
-                .anyMatch(inscricao -> inscricao.getAluno().getId().equals(aluno.getId()));
+                .anyMatch(inscricao  ->inscricao.getAluno().getId().equals(aluno.getId()));
 
         if (jaInscrito) {
             throw new RuntimeException("Você já está inscrito nesta vaga de monitoria.");

@@ -13,6 +13,4 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     List<Professor> findByCadastradoTrue();
     @Query("SELECT p FROM Professor p JOIN p.pessoa.roles r WHERE r.role = :roleName")
     List<Professor> findProfessoresByRoleName(@Param("roleName") String roleName);
-//    List<Professor> findByNomeContainingIgnoreCase(String nome);
-//    List<Professor> findByInstituicao_Id(Long instituicaoId);
 }
